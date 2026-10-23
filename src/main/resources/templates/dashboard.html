@@ -1,41 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Dashboard</title>
-</head>
+<head th:replace="~{fragments :: head('Dashboard')}"></head>
 <body>
-<h1>Dashboard</h1>
-<a href="/products">Back to Products</a>
-<br><br>
+<nav th:replace="~{fragments :: navbar}"></nav>
 
-<h2>Summary</h2>
-<p>Total products: <b th:text="${totalProducts}"></b></p>
-<p>Total stock value: <b th:text="${#numbers.formatDecimal(totalValue, 1, 'COMMA', 2, 'POINT')}"></b></p>
+<div class="container">
+    <h1 class="mb-4">Dashboard</h1>
 
-<h2>Low Stock (fewer than <span th:text="${lowStockLimit}"></span>)</h2>
-<p th:if="${#lists.isEmpty(lowStockProducts)}">All products are well stocked.</p>
-<table border="1" cellpadding="8" th:unless="${#lists.isEmpty(lowStockProducts)}">
-    <tr>
-        <th>Product</th>
-        <th>Left in stock</th>
-    </tr>
-    <tr th:each="p : ${lowStockProducts}">
-        <td th:text="${p.name}"></td>
-        <td style="color:red" th:text="${p.quantity}"></td>
-    </tr>
-</table>
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card text-bg-primary">
+                <div class="card-body">
+                    <h6 class="card-title">Total Products</h6>
+                    <h2 th:text="${totalProducts}"></h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-bg-success">
+                <div class="card-body">
+                    <h6 class="card-title">Total Stock Value</h6>
+                    <h2 th:text="${#numbers.formatDecimal(totalValue, 1, 'COMMA', 2, 'POINT')}"></h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-bg-danger">
+                <div class="card-body">
+                    <h6 class="card-title">Low Stock Items</h6>
+                    <h2 th:text="${#lists.size(lowStockProducts)}"></h2>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<h2>Top Selling Products</h2>
-<p th:if="${#lists.isEmpty(topSelling)}">No orders yet.</p>
-<table border="1" cellpadding="8" th:unless="${#lists.isEmpty(topSelling)}">
-    <tr>
-        <th>Product</th>
-        <th>Total sold</th>
-    </tr>
-    <tr th:each="row : ${topSelling}">
-        <td th:text="${row[0]}"></td>
-        <td th:text="${row[1]}"></td>
-    </tr>
-</table>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h4>Low Stock (fewer than <span th:text="${lowStockLimit}"></span>)</h4>
+            <div class="alert alert-success" th:if="${#lists.isEmpty(lowStockProducts)}">
+                All products are well stocked.
+            </div>
+            <table class="table table-striped table-bordered" th:unless="${#lists.isEmpty(lowStockProducts)}">
+                <thead class="table-dark">
+                <tr>
+                    <th>Product</th>
+                    <th>Left in stock</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${lowStockProducts}">
+                    <td th:text="${p.name}"></td>
+                    <td class="text-danger fw-bold" th:text="${p.quantity}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <h4>Top Selling Products</h4>
+            <div class="alert alert-info" th:if="${#lists.isEmpty(topSelling)}">No orders yet.</div>
+            <table class="table table-striped table-bordered" th:unless="${#lists.isEmpty(topSelling)}">
+                <thead class="table-dark">
+                <tr>
+                    <th>Product</th>
+                    <th>Total sold</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="row : ${topSelling}">
+                    <td th:text="${row[0]}"></td>
+                    <td th:text="${row[1]}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>

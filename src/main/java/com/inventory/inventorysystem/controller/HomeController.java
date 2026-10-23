@@ -1,4 +1,4 @@
-package com.inventory.inventorysystem;
+package com.inventory.inventorysystem.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -7,6 +7,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "home";
+        return "redirect:/dashboard";
     }
 }

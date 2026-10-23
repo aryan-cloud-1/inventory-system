@@ -4,6 +4,7 @@ import com.inventory.inventorysystem.model.Product;
 import com.inventory.inventorysystem.repository.ProductRepository;
 import com.inventory.inventorysystem.repository.SupplierRepository;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ProductController {
@@ -61,8 +63,14 @@ public class ProductController {
     }
 
     @PostMapping("/products/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        productRepository.deleteById(id);
+    public String deleteProduct(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            productRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("success", "Product deleted");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("error",
+                    "Cannot delete this product because it has orders or stock history");
+        }
         return "redirect:/products";
     }
 }
