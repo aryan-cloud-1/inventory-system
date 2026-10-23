@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Dashboard</h1>
+<a href="/products">Back to Products</a>
+<br><br>
+
+<h2>Summary</h2>
+<p>Total products: <b th:text="${totalProducts}"></b></p>
+<p>Total stock value: <b th:text="${#numbers.formatDecimal(totalValue, 1, 'COMMA', 2, 'POINT')}"></b></p>
+
+<h2>Low Stock (fewer than <span th:text="${lowStockLimit}"></span>)</h2>
+<p th:if="${#lists.isEmpty(lowStockProducts)}">All products are well stocked.</p>
+<table border="1" cellpadding="8" th:unless="${#lists.isEmpty(lowStockProducts)}">
+    <tr>
+        <th>Product</th>
+        <th>Left in stock</th>
+    </tr>
+    <tr th:each="p : ${lowStockProducts}">
+        <td th:text="${p.name}"></td>
+        <td style="color:red" th:text="${p.quantity}"></td>
+    </tr>
+</table>
+
+<h2>Top Selling Products</h2>
+<p th:if="${#lists.isEmpty(topSelling)}">No orders yet.</p>
+<table border="1" cellpadding="8" th:unless="${#lists.isEmpty(topSelling)}">
+    <tr>
+        <th>Product</th>
+        <th>Total sold</th>
+    </tr>
+    <tr th:each="row : ${topSelling}">
+        <td th:text="${row[0]}"></td>
+        <td th:text="${row[1]}"></td>
+    </tr>
+</table>
+</body>
+</html>
