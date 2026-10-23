@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Stock History</title>
+</head>
+<body>
+<h1>Stock History</h1>
+<a href="/products">Back to Products</a>
+<br><br>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Date</th>
+        <th>Product</th>
+        <th>Type</th>
+        <th>Change</th>
+    </tr>
+    <tr th:each="t : ${transactions}">
+        <td th:text="${#temporals.format(t.transactionDate, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${t.product?.name}"></td>
+        <td th:text="${t.transactionType}"></td>
+        <td th:text="${t.quantityChange}"></td>
+    </tr>
+</table>
+</body>
+</html>

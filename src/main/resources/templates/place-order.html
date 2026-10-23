@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Place Order</title>
+</head>
+<body>
+<h1>Place Order</h1>
+
+<p style="color:green" th:if="${success}" th:text="${success}"></p>
+<p style="color:red" th:if="${error}" th:text="${error}"></p>
+
+<form th:action="@{/orders}" method="post">
+    <p>
+        Product:<br>
+        <select name="productId" required>
+            <option value="">-- Select product --</option>
+            <option th:each="p : ${products}" th:value="${p.id}"
+                    th:text="${p.name} + ' (in stock: ' + ${p.quantity} + ')'"></option>
+        </select>
+    </p>
+    <p>
+        Quantity:<br>
+        <input type="number" name="quantity" min="1" required>
+    </p>
+    <button type="submit">Place Order</button>
+</form>
+
+<br>
+<a href="/products">Back to Products</a>
+</body>
+</html>
